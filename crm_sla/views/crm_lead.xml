@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2023 - TODAY, Marcel Savegnago <marcel.savegnago@escodoo.com.br>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+    <record model="ir.ui.view" id="crm_lead_form_view">
+        <field name="name">crm.lead.form (in crm_sla)</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_form_view_oppor" />
+        <field name="arch" type="xml">
+            <field name="tag_ids" position="after">
+                <field name="sla_deadline" />
+            </field>
+            <notebook position="inside">
+                 <page string="SLA Status" name="page_sla_line">
+                    <field name="sla_line_ids">
+                        <tree>
+                            <field name="sla_id" />
+                            <field name="deadline" />
+                            <field name="reached_date" />
+                            <field name="sla_target_stage_id" />
+                            <field name="status" />
+                        </tree>
+                    </field>
+                </page>
+            </notebook>
+        </field>
+    </record>
+
+</odoo>

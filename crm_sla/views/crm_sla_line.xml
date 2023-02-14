@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2023 - TODAY, Marcel Savegnago <marcel.savegnago@escodoo.com.br>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+    <record model="ir.ui.view" id="view_crm_sla_line_tree">
+        <field name="name">crm.sla.line.tree</field>
+        <field name="model">crm.sla.line</field>
+        <field name="arch" type="xml">
+            <tree string="SLA Lines">
+                <field name="lead_id" />
+                <field name="sla_id" />
+                <field name="deadline" />
+                <field name="reached_date" />
+                <field name="sla_target_stage_id" />
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_crm_sla_line_tree">
+        <field name="name">SLA Lines</field>
+        <field name="res_model">crm.sla.line</field>
+        <field name="view_mode">tree,form,pivot</field>
+    </record>
+
+    <menuitem
+        id="menu_crm_sla_line_list"
+        name="SLA lines"
+        parent="crm.crm_menu_report"
+        action="action_crm_sla_line_tree"
+    />
+
+</odoo>
