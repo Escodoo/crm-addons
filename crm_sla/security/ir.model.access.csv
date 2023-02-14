@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_crm_sla_user,Access CRM SLA User,model_crm_sla,base.group_user,1,0,0,0
+access_crm_sla_manager,Access CRM SLA Manager,model_crm_sla,sales_team.group_sale_manager,1,1,1,1
+access_crm_sla_line_user,Access CRM SLA Line User,model_crm_sla_line,base.group_user,1,0,0,0
+access_crm_sla_line_manager,Access CRM SLA Line Manager,model_crm_sla_line,base.group_no_one,1,1,1,1

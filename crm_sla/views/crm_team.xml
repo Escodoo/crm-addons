@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2023 - TODAY, Marcel Savegnago <marcel.savegnago@escodoo.com.br>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record model="ir.ui.view" id="crm_team_view_form">
+        <field name="name">inherit.crm_team_salesteams_view_form</field>
+        <field name="model">crm.team</field>
+        <field name="inherit_id" ref="sale.crm_team_salesteams_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='left']" position="after">
+                <group name="right">
+                    <field name="use_sla" />
+                    <field name="calendar_id" />
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

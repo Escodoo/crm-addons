@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2023 - TODAY, Marcel Savegnago <marcel.savegnago@escodoo.com.br>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+    <record model="ir.ui.view" id="view_crm_sla_form">
+        <field name="name">crm.sla.form</field>
+        <field name="model">crm.sla</field>
+        <field name="arch" type="xml">
+            <form string="SLA">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button
+                            name="toggle_active"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-archive"
+                            attrs="{'invisible': [('active', '=', True)]}"
+                        >
+                            <field
+                                name="active"
+                                widget="boolean_button"
+                                options='{"terminology": "archive"}'
+                            />
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only" />
+                        <h1>
+                            <field
+                                name="name"
+                                placeholder="e.g. Close urgent leads within 8 hours"
+                            />
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <separator colspan="2" string="Target" class="mt32" />
+                            <field name="target_stage_id" />
+                            <field name="duration" />
+                        </group>
+                    </group>
+                    <group>
+                        <separator colspan="2" string="Apply on" />
+                        <field name="team_id" domain="[('use_sla', '=', True)]" />
+                        <field name="tag_ids" widget="many2many_tags" />
+                        <field name="priority" widget="priority" />
+                        <field name="partner_ids" />
+                    </group>
+                    <notebook position="inside">
+                        <page string="SLA Description" name="sla_description">
+                            <field
+                                name="description"
+                                placeholder="Description of the policy..."
+                            />
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_crm_sla_tree">
+        <field name="name">crm.sla.tree</field>
+        <field name="model">crm.sla</field>
+        <field name="arch" type="xml">
+            <tree string="SLAs">
+                <field name="name" />
+                <field name="duration" />
+                <field name="tag_ids" widget="many2many_tags" />
+                <field name="priority" widget="priority" />
+                <field name="target_stage_id" />
+            </tree>
+        </field>
+    </record>
+
+    <!-- Ação de lista de SLAs -->
+    <record model="ir.actions.act_window" id="action_crm_sla_tree">
+        <field name="name">SLAs</field>
+        <field name="res_model">crm.sla</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menus de SLAs -->
+    <menuitem
+        id="menu_crm_sla_list"
+        name="SLAs"
+        parent="crm.crm_menu_config"
+        action="action_crm_sla_tree"
+    />
+
+</odoo>
