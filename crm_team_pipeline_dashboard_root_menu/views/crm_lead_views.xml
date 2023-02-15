@@ -1,11 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
     <data>
 
         <menuitem
             id="crm.crm_menu_root"
             name="CRM"
-            action="sales_team.crm_team_salesteams_act"/>
+            action="sales_team.crm_team_salesteams_act"
+        />
 
     </data>
 </odoo>
