@@ -1,0 +1,17 @@
+# Do NOT update manually; changes here will be overwritten by Copier
+_commit: v1.5.2
+_src_path: https://github.com/Escodoo/oca-addons-repo-template.git
+ci: GitHub
+dependency_installation_mode: PIP
+generate_requirements_txt: true
+include_wkhtmltopdf: false
+odoo_version: 12.0
+org_name: Escodoo
+org_slug: Escodoo
+rebel_module_groups: []
+repo_description: CRM Addons
+repo_name: CRM Addons
+repo_slug: crm-addons
+repo_website: https://github.com/escodoo/crm-addons
+travis_apt_packages: []
+travis_apt_sources: []
