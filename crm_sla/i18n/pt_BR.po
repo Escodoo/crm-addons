@@ -1,0 +1,259 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* crm_sla
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-02-15 18:34+0000\n"
+"PO-Revision-Date: 2023-02-15 15:35-0300\n"
+"Last-Translator: Marcel Savegnago <marcel.savegnago@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"Language: pt_BR\n"
+"X-Generator: Poedit 3.0\n"
+
+#. module: crm_sla
+#: model:ir.model.fields,field_description:crm_sla.field_crm_sla__active
+msgid "Active"
+msgstr "Ativo"
+
+#. module: crm_sla
+#: model_terms:ir.ui.view,arch_db:crm_sla.view_crm_sla_form
+msgid "Apply on"
+msgstr "Aplicar em"
+
+#. module: crm_sla
+#: model:ir.model.fields,field_description:crm_sla.field_crm_lead__sla_ids
+msgid "Computed SLAs"
+msgstr "SLAs computados"
+
+#. module: crm_sla
+#: model:ir.model.fields,field_description:crm_sla.field_crm_sla__create_uid
+#: model:ir.model.fields,field_description:crm_sla.field_crm_sla_line__create_uid
+msgid "Created by"
+msgstr "Criado por"
+
+#. module: crm_sla
+#: model:ir.model.fields,field_description:crm_sla.field_crm_sla__create_date
+#: model:ir.model.fields,field_description:crm_sla.field_crm_sla_line__create_date
+msgid "Created on"
+msgstr "Criado em"
+
+#. module: crm_sla
+#: model:ir.model.fields,field_description:crm_sla.field_crm_sla_line__deadline
+msgid "Deadline"
+msgstr "Prazo Final"
+
+#. module: crm_sla
+#: model_terms:ir.ui.view,arch_db:crm_sla.view_crm_sla_form
+msgid "Description of the policy..."
+msgstr "Descrição da política ..."
+
+#. module: crm_sla
+#: model:ir.model.fields,field_description:crm_sla.field_crm_sla__display_name
+#: model:ir.model.fields,field_description:crm_sla.field_crm_sla_line__display_name
+msgid "Display Name"
+msgstr "Nome exibido"
+
+#. module: crm_sla
+#: model:ir.model.fields,field_description:crm_sla.field_crm_sla__duration
+msgid "Duration (hours)"
+msgstr "Duração (horas)"
+
+#. module: crm_sla
+#: selection:crm.sla,priority:0
+msgid "High"
+msgstr "Alta"
+
+#. module: crm_sla
+#: model:ir.model.fields,field_description:crm_sla.field_crm_lead__sla_deadline
+msgid "Highest SLA Deadline"
+msgstr "Prazo Máximo do SLA"
+
+#. module: crm_sla
+#: model:ir.model.fields,field_description:crm_sla.field_crm_sla__id
+#: model:ir.model.fields,field_description:crm_sla.field_crm_sla_line__id
+msgid "ID"
+msgstr "ID"
+
+#. module: crm_sla
+#: model:ir.model.fields,field_description:crm_sla.field_crm_sla____last_update
+#: model:ir.model.fields,field_description:crm_sla.field_crm_sla_line____last_update
+msgid "Last Modified on"
+msgstr "Última modificação em"
+
+#. module: crm_sla
+#: model:ir.model.fields,field_description:crm_sla.field_crm_sla__write_uid
+#: model:ir.model.fields,field_description:crm_sla.field_crm_sla_line__write_uid
+msgid "Last Updated by"
+msgstr "Última atualização por"
+
+#. module: crm_sla
+#: model:ir.model.fields,field_description:crm_sla.field_crm_sla__write_date
+#: model:ir.model.fields,field_description:crm_sla.field_crm_sla_line__write_date
+msgid "Last Updated on"
+msgstr "Última atualização em"
+
+#. module: crm_sla
+#: model:ir.model.fields,field_description:crm_sla.field_crm_sla_line__lead_id
+msgid "Lead"
+msgstr "Prospecto"
+
+#. module: crm_sla
+#: model:ir.model,name:crm_sla.model_crm_lead
+msgid "Lead/Opportunity"
+msgstr "Prospecção/Oportunidade"
+
+#. module: crm_sla
+#: selection:crm.sla,priority:0
+msgid "Low"
+msgstr "Baixo"
+
+#. module: crm_sla
+#: selection:crm.sla,priority:0
+msgid "Medium"
+msgstr "Médio"
+
+#. module: crm_sla
+#: selection:crm.sla.line,status:0
+msgid "Met"
+msgstr "Atendidos"
+
+#. module: crm_sla
+#: model:ir.model.fields,field_description:crm_sla.field_crm_sla__name
+msgid "Name"
+msgstr "Nome"
+
+#. module: crm_sla
+#: selection:crm.sla.line,status:0
+msgid "Not Met"
+msgstr "Não Alcançado"
+
+#. module: crm_sla
+#: model:ir.model.fields,field_description:crm_sla.field_crm_sla__partner_ids
+msgid "Partners"
+msgstr "Parceiros"
+
+#. module: crm_sla
+#: model:ir.model.fields,field_description:crm_sla.field_crm_sla__priority
+msgid "Priority"
+msgstr "Prioridade"
+
+#. module: crm_sla
+#: model:ir.model.fields,field_description:crm_sla.field_crm_sla_line__reached_date
+msgid "Reached Date"
+msgstr "Data Alcançada"
+
+#. module: crm_sla
+#: model:ir.model,name:crm_sla.model_crm_sla
+#: model:ir.model.fields,field_description:crm_sla.field_crm_sla_line__sla_id
+#: model_terms:ir.ui.view,arch_db:crm_sla.view_crm_sla_form
+msgid "SLA"
+msgstr "Tempo Limite Máximo (SLA)"
+
+#. module: crm_sla
+#: model_terms:ir.ui.view,arch_db:crm_sla.view_crm_sla_form
+msgid "SLA Description"
+msgstr "Descrição da SLA"
+
+#. module: crm_sla
+#: model:ir.model,name:crm_sla.model_crm_sla_line
+msgid "SLA Line"
+msgstr "Linha da SLA"
+
+#. module: crm_sla
+#: model:ir.actions.act_window,name:crm_sla.action_crm_sla_line_tree
+#: model:ir.model.fields,field_description:crm_sla.field_crm_lead__sla_line_ids
+#: model_terms:ir.ui.view,arch_db:crm_sla.view_crm_sla_line_tree
+msgid "SLA Lines"
+msgstr "Linhas da SLA"
+
+#. module: crm_sla
+#: model:ir.model.fields,field_description:crm_sla.field_crm_sla__description
+msgid "SLA Policy Description"
+msgstr "Descrição da Política SLA"
+
+#. module: crm_sla
+#: model_terms:ir.ui.view,arch_db:crm_sla.crm_lead_form_view
+msgid "SLA Status"
+msgstr "Status da SLA"
+
+#. module: crm_sla
+#: model:ir.ui.menu,name:crm_sla.menu_crm_sla_line_list
+msgid "SLA lines"
+msgstr "Linhas de SLA"
+
+#. module: crm_sla
+#: model:ir.actions.act_window,name:crm_sla.action_crm_sla_tree
+#: model:ir.ui.menu,name:crm_sla.menu_crm_sla_list
+#: model_terms:ir.ui.view,arch_db:crm_sla.view_crm_sla_tree
+msgid "SLAs"
+msgstr "SLAs"
+
+#. module: crm_sla
+#: model:ir.model,name:crm_sla.model_crm_team
+msgid "Sales Channels"
+msgstr "Canais de Venda"
+
+#. module: crm_sla
+#: model:ir.model.fields,field_description:crm_sla.field_crm_sla_line__status
+msgid "Status"
+msgstr "Situação"
+
+#. module: crm_sla
+#: model:ir.actions.server,name:crm_sla.crm_sla_cron_alert_ir_actions_server
+#: model:ir.cron,cron_name:crm_sla.crm_sla_cron_alert
+#: model:ir.cron,name:crm_sla.crm_sla_cron_alert
+msgid "Sync All CRM SLA Lines"
+msgstr "Sincronizar Todas as Linhas de SLA do CRM"
+
+#. module: crm_sla
+#: model:ir.model.fields,field_description:crm_sla.field_crm_sla__tag_ids
+msgid "Tags"
+msgstr "Marcadores"
+
+#. module: crm_sla
+#: model_terms:ir.ui.view,arch_db:crm_sla.view_crm_sla_form
+msgid "Target"
+msgstr "Meta"
+
+#. module: crm_sla
+#: model:ir.model.fields,field_description:crm_sla.field_crm_sla__target_stage_id
+#: model:ir.model.fields,field_description:crm_sla.field_crm_sla_line__sla_target_stage_id
+msgid "Target Stage"
+msgstr "Estágio Alvo"
+
+#. module: crm_sla
+#: model:ir.model.fields,field_description:crm_sla.field_crm_sla__team_id
+msgid "Team"
+msgstr "Equipe"
+
+#. module: crm_sla
+#: sql_constraint:crm.sla:0
+msgid "The duration of an SLA must be positive."
+msgstr "A duração de um SLA deve ser positiva."
+
+#. module: crm_sla
+#: model:ir.model.fields,field_description:crm_sla.field_crm_team__use_sla
+msgid "Use SLA"
+msgstr "Usar SLA"
+
+#. module: crm_sla
+#: selection:crm.sla,priority:0
+msgid "Very High"
+msgstr "Muito Alta"
+
+#. module: crm_sla
+#: model:ir.model.fields,field_description:crm_sla.field_crm_team__calendar_id
+msgid "Working Hours"
+msgstr "Horas Trabalhadas"
+
+#. module: crm_sla
+#: model_terms:ir.ui.view,arch_db:crm_sla.view_crm_sla_form
+msgid "e.g. Close urgent leads within 8 hours"
+msgstr "por exemplo: Fechar prospectos urgentes dentro de 8 horas"
