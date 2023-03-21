@@ -1,6 +1,6 @@
 <!-- [![Runbot Status](https://runbot.odoo-community.org/runbot/badge/flat//12.0.svg)](https://runbot.odoo-community.org/runbot/repo/github-com-oca-crm-addons-) -->
-[![Build Status](https://travis-ci.com/Escodoo/crm-addons.svg?branch=12.0)](https://travis-ci.com/Escodoo/crm-addons)
-<!-- [![codecov](https://codecov.io/gh/Escodoo/crm-addons/branch/12.0/graph/badge.svg)](https://codecov.io/gh/Escodoo/crm-addons) -->
+<!-- [![Build Status](https://travis-ci.com/Escodoo/crm-addons.svg?branch=12.0)](https://travis-ci.com/Escodoo/crm-addons) -->
+[![codecov](https://codecov.io/gh/Escodoo/crm-addons/branch/12.0/graph/badge.svg)](https://codecov.io/gh/Escodoo/crm-addons)
 <!-- [![Translation Status](https://translation.odoo-community.org/widgets/crm-addons-12.0/-/svg-badge.svg)](https://translation.odoo-community.org/engage/crm-addons-12.0/?utm_source=widget) -->
 
 <!-- /!\ do not modify above this line -->
@@ -14,6 +14,13 @@ CRM Addons
 <!-- prettier-ignore-start -->
 
 [//]: # (addons)
+
+Available addons
+----------------
+addon | version | maintainers | summary
+--- | --- | --- | ---
+[crm_sla](crm_sla/) | 12.0.1.0.0 |  | CRM SLA
+[crm_team_pipeline_dashboard_root_menu](crm_team_pipeline_dashboard_root_menu/) | 12.0.1.0.0 |  | This module changes the CRM root menu to open Team Pipeline Dashboard
 
 [//]: # (end addons)
 
