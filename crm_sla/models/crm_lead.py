@@ -200,25 +200,26 @@ class CrmLead(models.Model):
         else:
             self._update_sla_lines()
 
-    @api.model
-    def _sync_all_sla_lines(self):
-        # TODO: For more performance is necessary not filter leads with
-        #  probability equal 100. But is necessary check if reached_date is False.
-        leads = (
-            self.env["crm.lead"]
-            .search([])
-            .filtered(
-                lambda r: (
-                    r.active
-                    and r.team_id.use_sla
-                    and any(not p.reached_date for p in r.sla_line_ids)
-                    or not r.sla_line_ids
-                )
-            )
-        )
-        for lead in leads:
-            lead._sync_sla_lines()
+    # TODO: os métodos utilizados pelo CRON precisam ser revisados
+    # @api.model
+    # def _sync_all_sla_lines(self):
+    #     # TODO: For more performance is necessary not filter leads with
+    #     #  probability equal 100. But is necessary check if reached_date is False.
+    #     leads = (
+    #         self.env["crm.lead"]
+    #         .search([])
+    #         .filtered(
+    #             lambda r: (
+    #                 r.active
+    #                 and r.team_id.use_sla
+    #                 and any(not p.reached_date for p in r.sla_line_ids)
+    #                 or not r.sla_line_ids
+    #             )
+    #         )
+    #     )
+    #     for lead in leads:
+    #         lead._sync_sla_lines()
 
-    @api.model
-    def cron_sync_all_sla_lines(self):
-        self._sync_all_sla_lines()
+    # @api.model
+    # def cron_sync_all_sla_lines(self):
+    #     self._sync_all_sla_lines()
