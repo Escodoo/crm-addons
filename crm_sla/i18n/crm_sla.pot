@@ -208,13 +208,6 @@ msgid "Status"
 msgstr ""
 
 #. module: crm_sla
-#: model:ir.actions.server,name:crm_sla.crm_sla_cron_alert_ir_actions_server
-#: model:ir.cron,cron_name:crm_sla.crm_sla_cron_alert
-#: model:ir.cron,name:crm_sla.crm_sla_cron_alert
-msgid "Sync All CRM SLA Lines"
-msgstr ""
-
-#. module: crm_sla
 #: model:ir.model.fields,field_description:crm_sla.field_crm_sla__tag_ids
 msgid "Tags"
 msgstr ""
