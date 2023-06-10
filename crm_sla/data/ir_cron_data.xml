@@ -6,7 +6,7 @@
         <field name="state">code</field>
         <field name="code">model.cron_sync_all_sla_lines()</field>
         <field name="user_id" ref="base.user_root" />
-        <field name="interval_number">15</field>
+        <field name="interval_number">1</field>
         <field name="interval_type">minutes</field>
         <field name="numbercall">-1</field>
         <field eval="False" name="doall" />

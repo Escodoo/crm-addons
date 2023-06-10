@@ -122,7 +122,8 @@ class CrmLead(models.Model):
                 sla_line.reached_date and sla_line.reached_date > sla_deadline
             ):
                 sla_line.status = "not_met"
-            else:
+
+            if (sla_line.reached_date and sla_line.reached_date < sla_deadline):
                 sla_line.status = "met"
             sla_lines.append(
                 (
@@ -170,7 +171,7 @@ class CrmLead(models.Model):
             return tuple(key)
 
         for lead in self:
-            if lead.team_id.use_sla:
+            if lead.team_id.use_sla and (lead.create_date >= lead.team_id.start_date_sla):
                 key = _generate_key(lead)
                 leads_map.setdefault(key, self.env["crm.lead"])
                 leads_map[key] |= lead
@@ -201,25 +202,26 @@ class CrmLead(models.Model):
             self._update_sla_lines()
 
     # TODO: os métodos utilizados pelo CRON precisam ser revisados
-    # @api.model
-    # def _sync_all_sla_lines(self):
-    #     # TODO: For more performance is necessary not filter leads with
-    #     #  probability equal 100. But is necessary check if reached_date is False.
-    #     leads = (
-    #         self.env["crm.lead"]
-    #         .search([])
-    #         .filtered(
-    #             lambda r: (
-    #                 r.active
-    #                 and r.team_id.use_sla
-    #                 and any(not p.reached_date for p in r.sla_line_ids)
-    #                 or not r.sla_line_ids
-    #             )
-    #         )
-    #     )
-    #     for lead in leads:
-    #         lead._sync_sla_lines()
+    @api.model
+    def _sync_all_sla_lines(self):
+        # TODO: For more performance is necessary not filter leads with
+        #  probability equal 100. But is necessary check if reached_date is False.
+        leads = (
+            self.env["crm.lead"]
+            .search([])
+            .filtered(
+                lambda r: (
+                    r.active
+                    and r.team_id.use_sla
+                    and r.create_date >= r.team_id.start_date_sla
+                    and any(not p.reached_date for p in r.sla_line_ids)
+                    or not r.sla_line_ids
+                )
+            )
+        )
+        for lead in leads:
+            lead._sync_sla_lines()
 
-    # @api.model
-    # def cron_sync_all_sla_lines(self):
-    #     self._sync_all_sla_lines()
+    @api.model
+    def cron_sync_all_sla_lines(self):
+        self._sync_all_sla_lines()
