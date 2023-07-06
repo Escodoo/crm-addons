@@ -214,8 +214,9 @@ class CrmLead(models.Model):
                     r.active
                     and r.team_id.use_sla
                     and r.create_date >= r.team_id.start_date_sla
-                    and any(not p.reached_date for p in r.sla_line_ids)
-                    or not r.sla_line_ids
+                    and (
+                        any(not p.reached_date for p in r.sla_line_ids)
+                        or not r.sla_line_ids)
                 )
             )
         )
