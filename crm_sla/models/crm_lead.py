@@ -146,48 +146,40 @@ class CrmLead(models.Model):
 
     @api.model
     def _sla_reset_trigger(self):
-        """Get the list of field for which we have to reset
-        the SLAs (regenerate)"""
         return ["team_id", "priority", "partner_id", "tag_ids"]
 
     def _sla_find(self):
-        """Find the SLA to apply on the current leads
-        :returns a map with the leads linked to the SLA to apply on them
-        :rtype : dict {<crm.lead>: <crm.sla>}
-        """
-        leads_map = {}
+        records_map = {}
         sla_domain_map = {}
 
-        def _generate_key(lead):
-            """Return a tuple identifying the combination of
-            fields determining the SLA to apply on the lead"""
-            fields_list = lead._sla_reset_trigger()
+        def _generate_key(record):
+            fields_list = record._sla_reset_trigger()
             key = []
             for field_name in fields_list:
-                if lead._fields[field_name].type == "many2one":
-                    key.append(lead[field_name].id)
+                if record._fields[field_name].type == "many2one":
+                    key.append(record[field_name].id)
                 else:
-                    key.append(lead[field_name])
+                    key.append(record[field_name])
             return tuple(key)
 
-        for lead in self:
-            if lead.team_id.use_sla and (lead.create_date >= lead.team_id.start_date_sla):
-                key = _generate_key(lead)
-                leads_map.setdefault(key, self.env["crm.lead"])
-                leads_map[key] |= lead
+        for record in self:
+            if record.team_id.use_sla and (record.create_date >= record.team_id.start_date_sla):
+                key = _generate_key(record)
+                records_map.setdefault(key, self.env["crm.lead"])
+                records_map[key] |= record
                 if key not in sla_domain_map:
                     sla_domain_map[key] = expression.AND(
                         [
                             [
-                                ("team_id", "=", lead.team_id.id),
-                                ("priority", "=", lead.priority),
+                                ("team_id", "=", record.team_id.id),
+                                ("priority", "=", record.priority),
                             ],
-                            lead._sla_find_extra_domain(),
+                            record._sla_find_extra_domain(),
                         ]
                     )
 
         result = {}
-        for key, leads in leads_map.items():
+        for key, leads in records_map.items():
             domain = sla_domain_map[key]
             slas = self.env["crm.sla"].search(domain)
             result[leads] = slas.filtered(
@@ -201,12 +193,9 @@ class CrmLead(models.Model):
         else:
             self._update_sla_lines()
 
-    # TODO: os métodos utilizados pelo CRON precisam ser revisados
     @api.model
     def _sync_all_sla_lines(self):
-        # TODO: For more performance is necessary not filter leads with
-        #  probability equal 100. But is necessary check if reached_date is False.
-        leads = (
+        records = (
             self.env["crm.lead"]
             .search([])
             .filtered(
@@ -220,8 +209,8 @@ class CrmLead(models.Model):
                 )
             )
         )
-        for lead in leads:
-            lead._sync_sla_lines()
+        for record in records:
+            record._sync_sla_lines()
 
     @api.model
     def cron_sync_all_sla_lines(self):
