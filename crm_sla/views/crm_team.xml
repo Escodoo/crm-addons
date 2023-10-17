@@ -11,6 +11,8 @@
                 <group name="right">
                     <field name="use_sla" />
                     <field name="resource_calendar_id" />
+                    <field name="start_date_sla"/>
+                    
                 </group>
             </xpath>
         </field>
