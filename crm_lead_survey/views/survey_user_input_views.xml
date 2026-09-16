@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 - TODAY, Wesley Oliveira <wesley.oliveira@escodoo.com.br>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+    <record id="survey_user_input_view_form" model="ir.ui.view">
+        <field name="name">survey.user_input.form.lead</field>
+        <field name="model">survey.user_input</field>
+        <field name="inherit_id" ref="survey.survey_user_input_view_form" />
+        <field name="arch" type="xml">
+            <field name="survey_id" position="after">
+                <field name="lead_id" options="{'no_create': True}" />
+            </field>
+        </field>
+    </record>
+
+    <record id="survey_user_input_view_tree" model="ir.ui.view">
+        <field name="name">survey.user_input.tree.lead</field>
+        <field name="model">survey.user_input</field>
+        <field name="inherit_id" ref="survey.survey_user_input_view_tree" />
+        <field name="arch" type="xml">
+            <field name="survey_id" position="after">
+                <field name="lead_id" optional="hide" />
+            </field>
+        </field>
+    </record>
+
+    <record id="survey_user_input_view_search" model="ir.ui.view">
+        <field name="name">survey.user_input.search.lead</field>
+        <field name="model">survey.user_input</field>
+        <field name="inherit_id" ref="survey.survey_user_input_view_search" />
+        <field name="arch" type="xml">
+            <field name="survey_id" position="after">
+                <field name="lead_id" />
+            </field>
+            <filter name="group_by_survey" position="after">
+                <filter
+                    name="group_by_lead"
+                    string="Opportunity"
+                    domain="[]"
+                    context="{'group_by': 'lead_id'}"
+                />
+            </filter>
+        </field>
+    </record>
+
+</odoo>
