@@ -1,0 +1,188 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* crm_lead_survey
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#. module: crm_lead_survey
+#: model:ir.model.fields,field_description:crm_lead_survey.field_crm_lead__survey_done_count
+msgid "# Completed Surveys"
+msgstr "Nº de Pesquisas Concluídas"
+
+#. module: crm_lead_survey
+#: model:ir.model.fields,field_description:crm_lead_survey.field_crm_lead__survey_count
+msgid "# Surveys"
+msgstr "Nº de Pesquisas"
+
+#. module: crm_lead_survey
+#: model_terms:ir.ui.view,arch_db:crm_lead_survey.crm_lead_view_form
+msgid ""
+"<span class=\"o_stat_text\" attrs=\"{'invisible': [('survey_count', '&lt;', "
+"2)]}\">Surveys</span>\n"
+"                        <span class=\"o_stat_text\" attrs=\"{'invisible': "
+"[('survey_count', '&gt;', 1)]}\">Survey</span>"
+msgstr ""
+"<span class=\"o_stat_text\" attrs=\"{'invisible': [('survey_count', '&lt;', "
+"2)]}\">Pesquisas</span>\n"
+"                        <span class=\"o_stat_text\" attrs=\"{'invisible': "
+"[('survey_count', '&gt;', 1)]}\">Pesquisa</span>"
+
+#. module: crm_lead_survey
+#: model:ir.model.fields,field_description:crm_lead_survey.field_crm_lead_survey_wizard__deadline
+msgid "Answer Deadline"
+msgstr "Prazo para Resposta"
+
+#. module: crm_lead_survey
+#: model:ir.model.fields,field_description:crm_lead_survey.field_crm_lead_survey_wizard__start_now
+msgid "Answer now"
+msgstr "Responder agora"
+
+#. module: crm_lead_survey
+#: model:ir.model,name:crm_lead_survey.model_crm_stage
+msgid "CRM Stages"
+msgstr "Estágios do CRM"
+
+#. module: crm_lead_survey
+#: model_terms:ir.ui.view,arch_db:crm_lead_survey.crm_lead_survey_wizard_view_form
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: crm_lead_survey
+#: model:ir.model.fields,field_description:crm_lead_survey.field_crm_lead_survey_wizard__partner_id
+msgid "Contact"
+msgstr "Contato"
+
+#. module: crm_lead_survey
+#: model:ir.model.fields,help:crm_lead_survey.field_crm_lead_survey_wizard__partner_id
+msgid ""
+"Contact the participation is created for. Ignored when the survey is "
+"answered now, since it then belongs to the current user."
+msgstr ""
+"Contato para quem a participação é criada. Ignorado quando a pesquisa é "
+"respondida agora, pois nesse caso ela pertence ao usuário atual."
+
+#. module: crm_lead_survey
+#: model:ir.model.fields,field_description:crm_lead_survey.field_crm_lead_survey_wizard__create_uid
+msgid "Created by"
+msgstr "Criado por"
+
+#. module: crm_lead_survey
+#: model:ir.model.fields,field_description:crm_lead_survey.field_crm_lead_survey_wizard__create_date
+msgid "Created on"
+msgstr "Criado em"
+
+#. module: crm_lead_survey
+#: model:ir.model.fields,help:crm_lead_survey.field_crm_lead_survey_wizard__deadline
+msgid "Date until which the contact can open the survey and submit answers."
+msgstr "Data limite para o contato abrir a pesquisa e enviar as respostas."
+
+#. module: crm_lead_survey
+#: model:ir.model.fields,field_description:crm_lead_survey.field_crm_lead_survey_wizard__display_name
+msgid "Display Name"
+msgstr "Nome exibido"
+
+#. module: crm_lead_survey
+#: model:ir.model.fields,field_description:crm_lead_survey.field_crm_lead_survey_wizard__id
+msgid "ID"
+msgstr "ID"
+
+#. module: crm_lead_survey
+#: model:ir.model.fields,help:crm_lead_survey.field_crm_stage__survey_required
+msgid ""
+"If checked, an opportunity can only be moved to this stage when it has at "
+"least one completed survey linked to it."
+msgstr ""
+"Se marcado, uma oportunidade só poderá ser movida para este estágio quando "
+"tiver ao menos uma pesquisa concluída vinculada a ela."
+
+#. module: crm_lead_survey
+#: model:ir.model.fields,field_description:crm_lead_survey.field_crm_lead_survey_wizard____last_update
+msgid "Last Modified on"
+msgstr "Última modificação em"
+
+#. module: crm_lead_survey
+#: model:ir.model.fields,field_description:crm_lead_survey.field_crm_lead_survey_wizard__write_uid
+msgid "Last Updated by"
+msgstr "Última atualização por"
+
+#. module: crm_lead_survey
+#: model:ir.model.fields,field_description:crm_lead_survey.field_crm_lead_survey_wizard__write_date
+msgid "Last Updated on"
+msgstr "Última atualização em"
+
+#. module: crm_lead_survey
+#: model:ir.model,name:crm_lead_survey.model_crm_lead
+msgid "Lead/Opportunity"
+msgstr "Lead/Oportunidade"
+
+#. module: crm_lead_survey
+#: model:ir.model.fields,help:crm_lead_survey.field_crm_lead_survey_wizard__start_now
+msgid ""
+"Open the survey right away and answer it as the current user. Uncheck it to "
+"only register the participation for the contact, for instance to send them "
+"the link later."
+msgstr ""
+"Abre a pesquisa imediatamente e a responde como o usuário atual. Desmarque "
+"para apenas registrar a participação para o contato, por exemplo para "
+"enviar o link depois."
+
+#. module: crm_lead_survey
+#: model:ir.model.fields,field_description:crm_lead_survey.field_crm_lead_survey_wizard__lead_id
+#: model:ir.model.fields,field_description:crm_lead_survey.field_survey_user_input__lead_id
+#: model_terms:ir.ui.view,arch_db:crm_lead_survey.survey_user_input_view_search
+msgid "Opportunity"
+msgstr "Oportunidade"
+
+#. module: crm_lead_survey
+#: model:ir.model.fields,help:crm_lead_survey.field_survey_user_input__lead_id
+msgid "Opportunity this participation is linked to."
+msgstr "Oportunidade à qual esta participação está vinculada."
+
+#. module: crm_lead_survey
+#: model:ir.actions.act_window,name:crm_lead_survey.crm_lead_survey_wizard_action
+#: model_terms:ir.ui.view,arch_db:crm_lead_survey.crm_lead_survey_wizard_view_form
+#: model_terms:ir.ui.view,arch_db:crm_lead_survey.crm_lead_view_form
+msgid "Start Survey"
+msgstr "Iniciar Pesquisa"
+
+#. module: crm_lead_survey
+#: model:ir.model,name:crm_lead_survey.model_crm_lead_survey_wizard
+msgid "Start a survey from an opportunity"
+msgstr "Iniciar uma pesquisa a partir de uma oportunidade"
+
+#. module: crm_lead_survey
+#: model:ir.model.fields,field_description:crm_lead_survey.field_crm_lead_survey_wizard__survey_id
+msgid "Survey"
+msgstr "Pesquisa"
+
+#. module: crm_lead_survey
+#: model:ir.model,name:crm_lead_survey.model_survey_user_input
+msgid "Survey User Input"
+msgstr "Participação em Pesquisa"
+
+#. module: crm_lead_survey
+#: model:ir.model.fields,field_description:crm_lead_survey.field_crm_stage__survey_required
+msgid "Survey required"
+msgstr "Pesquisa obrigatória"
+
+#. module: crm_lead_survey
+#: model:ir.model.fields,field_description:crm_lead_survey.field_crm_lead__survey_user_input_ids
+msgid "Surveys"
+msgstr "Pesquisas"
+
+#. module: crm_lead_survey
+#. odoo-python
+#: code:addons/crm_lead_survey/models/crm_lead.py:0
+#, python-format
+msgid "This stage requires at least one completed survey."
+msgstr "Este estágio exige pelo menos uma pesquisa concluída."
