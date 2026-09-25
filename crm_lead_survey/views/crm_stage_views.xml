@@ -10,6 +10,11 @@
         <field name="arch" type="xml">
             <field name="is_won" position="after">
                 <field name="survey_required" />
+                <field
+                    name="survey_id"
+                    options="{'no_create': True}"
+                    attrs="{'invisible': [('survey_required', '=', False)]}"
+                />
             </field>
         </field>
     </record>
@@ -21,6 +26,7 @@
         <field name="arch" type="xml">
             <field name="is_won" position="after">
                 <field name="survey_required" optional="show" />
+                <field name="survey_id" optional="show" />
             </field>
         </field>
     </record>

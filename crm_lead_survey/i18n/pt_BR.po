@@ -149,6 +149,11 @@ msgid "Opportunity this participation is linked to."
 msgstr "Oportunidade à qual esta participação está vinculada."
 
 #. module: crm_lead_survey
+#: model:ir.model.fields,field_description:crm_lead_survey.field_crm_stage__survey_id
+msgid "Required survey"
+msgstr "Pesquisa exigida"
+
+#. module: crm_lead_survey
 #: model:ir.actions.act_window,name:crm_lead_survey.crm_lead_survey_wizard_action
 #: model_terms:ir.ui.view,arch_db:crm_lead_survey.crm_lead_survey_wizard_view_form
 #: model_terms:ir.ui.view,arch_db:crm_lead_survey.crm_lead_view_form
@@ -176,9 +181,29 @@ msgid "Survey required"
 msgstr "Pesquisa obrigatória"
 
 #. module: crm_lead_survey
+#: model:ir.model.fields,help:crm_lead_survey.field_crm_stage__survey_id
+msgid ""
+"Survey that must be completed for the opportunity before it can be moved to "
+"this stage. If empty, any completed survey is accepted."
+msgstr ""
+"Pesquisa que precisa ser concluída para a oportunidade antes que ela possa "
+"ser movida para este estágio. Se vazio, qualquer pesquisa concluída é aceita."
+
+#. module: crm_lead_survey
 #: model:ir.model.fields,field_description:crm_lead_survey.field_crm_lead__survey_user_input_ids
 msgid "Surveys"
 msgstr "Pesquisas"
+
+#. module: crm_lead_survey
+#. odoo-python
+#: code:addons/crm_lead_survey/models/crm_lead.py:0
+#, python-format
+msgid ""
+"The stage \"%(stage)s\" requires the survey \"%(survey)s\" to be completed "
+"for this opportunity."
+msgstr ""
+"O estágio \"%(stage)s\" exige que a pesquisa \"%(survey)s\" seja concluída "
+"para esta oportunidade."
 
 #. module: crm_lead_survey
 #. odoo-python
