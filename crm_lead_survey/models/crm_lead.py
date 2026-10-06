@@ -50,13 +50,25 @@ class CrmLead(models.Model):
     @api.constrains("stage_id", "survey_user_input_ids")
     def _check_stage_survey_required(self):
         for lead in self:
-            if not lead.stage_id.survey_required:
+            stage = lead.stage_id
+            if not stage.survey_required:
                 continue
-            if not lead.sudo().survey_user_input_ids.filtered(
+            done_inputs = lead.sudo().survey_user_input_ids.filtered(
                 lambda user_input: user_input.state == "done"
-            ):
+            )
+            if not stage.survey_id:
+                if not done_inputs:
+                    raise ValidationError(
+                        _("This stage requires at least one completed survey.")
+                    )
+            elif stage.survey_id not in done_inputs.survey_id:
                 raise ValidationError(
-                    _("This stage requires at least one completed survey.")
+                    _(
+                        'The stage "%(stage)s" requires the survey "%(survey)s" '
+                        "to be completed for this opportunity.",
+                        stage=stage.name,
+                        survey=stage.sudo().survey_id.title,
+                    )
                 )
 
     def action_view_surveys(self):

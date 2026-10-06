@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from odoo.exceptions import ValidationError
-from odoo.tests.common import TransactionCase
+from odoo.tests.common import Form, TransactionCase
 
 
 class TestCrmLeadSurvey(TransactionCase):
@@ -20,11 +20,27 @@ class TestCrmLeadSurvey(TransactionCase):
                 ],
             }
         )
+        cls.survey_other = cls.env["survey.survey"].create(
+            {
+                "title": "Qualification",
+                "question_and_page_ids": [
+                    (0, 0, {"title": "Budget?", "question_type": "char_box"})
+                ],
+            }
+        )
         cls.stage_new = cls.env["crm.stage"].create(
             {"name": "Test New", "sequence": 100}
         )
         cls.stage_required = cls.env["crm.stage"].create(
             {"name": "Test Qualified", "sequence": 101, "survey_required": True}
+        )
+        cls.stage_specific = cls.env["crm.stage"].create(
+            {
+                "name": "Test Proposition",
+                "sequence": 102,
+                "survey_required": True,
+                "survey_id": cls.survey_other.id,
+            }
         )
         cls.lead = cls.env["crm.lead"].create(
             {
@@ -35,14 +51,15 @@ class TestCrmLeadSurvey(TransactionCase):
             }
         )
 
-    def _start_survey(self, lead=None, start_now=False):
+    def _start_survey(self, lead=None, start_now=False, survey=None):
         """Run the wizard the same way the form button does."""
         lead = lead or self.lead
+        survey = survey or self.survey
         action = lead.action_open_survey_wizard()
         wizard = (
             self.env[action["res_model"]]
             .with_context(**action["context"])
-            .create({"survey_id": self.survey.id, "start_now": start_now})
+            .create({"survey_id": survey.id, "start_now": start_now})
         )
         wizard.action_confirm()
         return lead.survey_user_input_ids[-1]
@@ -130,3 +147,40 @@ class TestCrmLeadSurvey(TransactionCase):
                     "stage_id": self.stage_required.id,
                 }
             )
+
+    def test_stage_specific_survey_blocked_with_other_survey_done(self):
+        """A completed survey other than the one set on the stage is not enough."""
+        user_input = self._start_survey()
+        user_input.state = "done"
+        with self.assertRaisesRegex(ValidationError, "Qualification"):
+            self.lead.write({"stage_id": self.stage_specific.id})
+
+    def test_stage_specific_survey_blocked_while_in_progress(self):
+        user_input = self._start_survey(survey=self.survey_other)
+        user_input.state = "in_progress"
+        with self.assertRaises(ValidationError):
+            self.lead.write({"stage_id": self.stage_specific.id})
+
+    def test_stage_specific_survey_allowed_when_done(self):
+        self._start_survey().state = "in_progress"
+        self._start_survey(survey=self.survey_other).state = "done"
+        self.lead.write({"stage_id": self.stage_specific.id})
+        self.assertEqual(self.lead.stage_id, self.stage_specific)
+
+    def test_stage_specific_survey_done_on_other_lead_does_not_count(self):
+        other_lead = self.env["crm.lead"].create(
+            {"name": "Other Opportunity", "type": "opportunity"}
+        )
+        self._start_survey(lead=other_lead, survey=self.survey_other).state = "done"
+        with self.assertRaises(ValidationError):
+            self.lead.write({"stage_id": self.stage_specific.id})
+
+    def test_stage_survey_ignored_when_not_required(self):
+        self.stage_specific.survey_required = False
+        self.lead.write({"stage_id": self.stage_specific.id})
+        self.assertEqual(self.lead.stage_id, self.stage_specific)
+
+    def test_stage_survey_cleared_when_unchecking_required(self):
+        with Form(self.stage_specific) as stage_form:
+            stage_form.survey_required = False
+        self.assertFalse(self.stage_specific.survey_id)

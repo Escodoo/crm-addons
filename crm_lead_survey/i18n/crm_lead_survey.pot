@@ -135,6 +135,11 @@ msgid "Opportunity this participation is linked to."
 msgstr ""
 
 #. module: crm_lead_survey
+#: model:ir.model.fields,field_description:crm_lead_survey.field_crm_stage__survey_id
+msgid "Required survey"
+msgstr ""
+
+#. module: crm_lead_survey
 #: model:ir.actions.act_window,name:crm_lead_survey.crm_lead_survey_wizard_action
 #: model_terms:ir.ui.view,arch_db:crm_lead_survey.crm_lead_survey_wizard_view_form
 #: model_terms:ir.ui.view,arch_db:crm_lead_survey.crm_lead_view_form
@@ -162,8 +167,24 @@ msgid "Survey required"
 msgstr ""
 
 #. module: crm_lead_survey
+#: model:ir.model.fields,help:crm_lead_survey.field_crm_stage__survey_id
+msgid ""
+"Survey that must be completed for the opportunity before it can be moved to "
+"this stage. If empty, any completed survey is accepted."
+msgstr ""
+
+#. module: crm_lead_survey
 #: model:ir.model.fields,field_description:crm_lead_survey.field_crm_lead__survey_user_input_ids
 msgid "Surveys"
+msgstr ""
+
+#. module: crm_lead_survey
+#. odoo-python
+#: code:addons/crm_lead_survey/models/crm_lead.py:0
+#, python-format
+msgid ""
+"The stage \"%(stage)s\" requires the survey \"%(survey)s\" to be completed "
+"for this opportunity."
 msgstr ""
 
 #. module: crm_lead_survey

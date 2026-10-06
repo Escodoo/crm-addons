@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
@@ -9,10 +8,11 @@
 
 /*
 :Author: David Goodger (goodger@python.org)
-:Id: $Id: html4css1.css 8954 2022-01-20 10:10:25Z milde $
+:Id: $Id: html4css1.css 9511 2024-01-13 09:50:07Z milde $
 :Copyright: This stylesheet has been placed in the public domain.
 
 Default cascading style sheet for the HTML output of Docutils.
+Despite the name, some widely supported CSS2 features are used.
 
 See https://docutils.sourceforge.io/docs/howto/html-stylesheets.html for how to
 customize this style sheet.
@@ -275,7 +275,7 @@ pre.literal-block, pre.doctest-block, pre.math, pre.code {
   margin-left: 2em ;
   margin-right: 2em }
 
-pre.code .ln { color: grey; } /* line numbers */
+pre.code .ln { color: gray; } /* line numbers */
 pre.code, code { background-color: #eeeeee }
 pre.code .comment, code .comment { color: #5C6576 }
 pre.code .keyword, code .keyword { color: #3B0D06; font-weight: bold }
@@ -301,7 +301,7 @@ span.option {
 span.pre {
   white-space: pre }
 
-span.problematic {
+span.problematic, pre.problematic {
   color: red }
 
 span.section-subtitle {
@@ -369,12 +369,12 @@ ul.auto-toc {
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !! source digest: sha256:5711a186acb8e74bf696b1a8533ca0baf70eca4bd375df0ec73e21abac1ca6a1
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Beta" src="https://img.shields.io/badge/maturity-Beta-yellow.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/licence-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/Escodoo/crm-addons/tree/16.0/crm_lead_survey"><img alt="Escodoo/crm-addons" src="https://img.shields.io/badge/github-Escodoo%2Fcrm--addons-lightgray.png?logo=github" /></a></p>
+<p><a class="reference external image-reference" href="https://odoo-community.org/page/development-status"><img alt="Beta" src="https://img.shields.io/badge/maturity-Beta-yellow.png" /></a> <a class="reference external image-reference" href="http://www.gnu.org/licenses/agpl-3.0-standalone.html"><img alt="License: AGPL-3" src="https://img.shields.io/badge/license-AGPL--3-blue.png" /></a> <a class="reference external image-reference" href="https://github.com/Escodoo/crm-addons/tree/16.0/crm_lead_survey"><img alt="Escodoo/crm-addons" src="https://img.shields.io/badge/github-Escodoo%2Fcrm--addons-lightgray.png?logo=github" /></a></p>
 <p>This module links Survey participations to CRM opportunities.</p>
 <p>It adds a <tt class="docutils literal">lead_id</tt> field on <tt class="docutils literal">survey.user_input</tt>, so every participation can
 point to the opportunity it was collected for, and it lets you mark CRM stages
-that can only be reached once the opportunity has at least one <strong>completed</strong>
-survey.</p>
+that can only be reached once the opportunity has a <strong>completed</strong> survey -
+either any survey, or a specific survey chosen on the stage.</p>
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
@@ -404,6 +404,10 @@ stage and check <strong>Survey required</strong>. From then on, moving an opport
 that stage - from the form or by dragging it in the kanban - raises an error
 unless at least one linked participation is in the <em>Completed</em> state. A survey
 that was only started or is still in progress does not unlock the stage.</p>
+<p>To require one survey in particular, also fill <strong>Required survey</strong> on the
+stage. The opportunity then needs a completed participation <em>of that survey</em>;
+completed participations of other surveys do not unlock the stage. Leave it
+empty to accept any completed survey.</p>
 <p>Participations can also be searched and grouped by opportunity from
 <em>Surveys &gt; Participations</em>.</p>
 </div>

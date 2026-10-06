@@ -5,7 +5,7 @@
     "name": "CRM Lead Survey",
     "summary": """
         Link surveys to CRM opportunities and require them per stage""",
-    "version": "16.0.1.0.0",
+    "version": "16.0.1.1.0",
     "category": "Customer Relationship Management",
     "license": "AGPL-3",
     "author": "Escodoo",

@@ -13,7 +13,7 @@ CRM Lead Survey
 .. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
     :alt: Beta
-.. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
+.. |badge2| image:: https://img.shields.io/badge/license-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-Escodoo%2Fcrm--addons-lightgray.png?logo=github
@@ -26,8 +26,8 @@ This module links Survey participations to CRM opportunities.
 
 It adds a ``lead_id`` field on ``survey.user_input``, so every participation can
 point to the opportunity it was collected for, and it lets you mark CRM stages
-that can only be reached once the opportunity has at least one **completed**
-survey.
+that can only be reached once the opportunity has a **completed** survey -
+either any survey, or a specific survey chosen on the stage.
 
 **Table of contents**
 
@@ -51,6 +51,11 @@ stage and check **Survey required**. From then on, moving an opportunity to
 that stage - from the form or by dragging it in the kanban - raises an error
 unless at least one linked participation is in the *Completed* state. A survey
 that was only started or is still in progress does not unlock the stage.
+
+To require one survey in particular, also fill **Required survey** on the
+stage. The opportunity then needs a completed participation *of that survey*;
+completed participations of other surveys do not unlock the stage. Leave it
+empty to accept any completed survey.
 
 Participations can also be searched and grouped by opportunity from
 *Surveys > Participations*.

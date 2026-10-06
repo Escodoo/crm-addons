@@ -13,5 +13,10 @@ that stage - from the form or by dragging it in the kanban - raises an error
 unless at least one linked participation is in the *Completed* state. A survey
 that was only started or is still in progress does not unlock the stage.
 
+To require one survey in particular, also fill **Required survey** on the
+stage. The opportunity then needs a completed participation *of that survey*;
+completed participations of other surveys do not unlock the stage. Leave it
+empty to accept any completed survey.
+
 Participations can also be searched and grouped by opportunity from
 *Surveys > Participations*.
