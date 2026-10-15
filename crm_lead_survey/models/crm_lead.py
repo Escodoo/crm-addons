@@ -21,6 +21,34 @@ class CrmLead(models.Model):
         string="# Completed Surveys",
         compute="_compute_survey_count",
     )
+    next_stage_id = fields.Many2one(
+        comodel_name="crm.stage",
+        string="Next Stage",
+        compute="_compute_next_stage_id",
+        help="Stage that follows the current one in the stage sequence.",
+    )
+
+    @api.depends("stage_id", "team_id")
+    def _compute_next_stage_id(self):
+        for lead in self:
+            lead.next_stage_id = lead._get_next_stage()
+
+    def _get_next_stage(self):
+        """Return the stage following the current one, among the stages
+        available for the lead's sales team, ordered by sequence."""
+        self.ensure_one()
+        stages = self.env["crm.stage"].search(
+            ["|", ("team_id", "=", False), ("team_id", "=", self.team_id.id)]
+        )
+        if not self.stage_id:
+            return stages[:1]
+        if self.stage_id in stages:
+            following = stages[stages.ids.index(self.stage_id.id) + 1 :]
+        else:
+            following = stages.filtered(
+                lambda stage: stage.sequence > self.stage_id.sequence
+            )
+        return following[:1]
 
     @api.depends("survey_user_input_ids", "survey_user_input_ids.state")
     def _compute_survey_count(self):

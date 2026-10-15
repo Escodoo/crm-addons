@@ -99,7 +99,11 @@ class TestCrmLeadSurvey(TransactionCase):
     def test_action_view_surveys_only_shows_own_answers(self):
         user_input = self._start_survey()
         other_lead = self.env["crm.lead"].create(
-            {"name": "Other Opportunity", "type": "opportunity"}
+            {
+                "name": "Other Opportunity",
+                "type": "opportunity",
+                "stage_id": self.stage_new.id,
+            }
         )
         self._start_survey(lead=other_lead)
         action = self.lead.action_view_surveys()
@@ -133,7 +137,11 @@ class TestCrmLeadSurvey(TransactionCase):
         user_input = self._start_survey()
         user_input.state = "done"
         other_lead = self.env["crm.lead"].create(
-            {"name": "Other Opportunity", "type": "opportunity"}
+            {
+                "name": "Other Opportunity",
+                "type": "opportunity",
+                "stage_id": self.stage_new.id,
+            }
         )
         with self.assertRaises(ValidationError):
             (self.lead | other_lead).write({"stage_id": self.stage_required.id})
@@ -169,7 +177,11 @@ class TestCrmLeadSurvey(TransactionCase):
 
     def test_stage_specific_survey_done_on_other_lead_does_not_count(self):
         other_lead = self.env["crm.lead"].create(
-            {"name": "Other Opportunity", "type": "opportunity"}
+            {
+                "name": "Other Opportunity",
+                "type": "opportunity",
+                "stage_id": self.stage_new.id,
+            }
         )
         self._start_survey(lead=other_lead, survey=self.survey_other).state = "done"
         with self.assertRaises(ValidationError):
@@ -184,3 +196,57 @@ class TestCrmLeadSurvey(TransactionCase):
         with Form(self.stage_specific) as stage_form:
             stage_form.survey_required = False
         self.assertFalse(self.stage_specific.survey_id)
+
+    def test_next_stage_follows_sequence(self):
+        self.assertEqual(self.lead.next_stage_id, self.stage_required)
+        self.stage_required.sequence = 103
+        self.lead.invalidate_recordset(["next_stage_id"])
+        self.assertEqual(self.lead.next_stage_id, self.stage_specific)
+
+    def test_next_stage_ignores_other_team_stages(self):
+        team = self.env["crm.team"].create({"name": "Other Team"})
+        self.stage_required.team_id = team
+        self.assertEqual(self.lead.next_stage_id, self.stage_specific)
+
+    def test_wizard_locks_next_stage_survey(self):
+        self.stage_required.survey_id = self.survey_other
+        action = self.lead.action_open_survey_wizard()
+        wizard = (
+            self.env[action["res_model"]]
+            .with_context(**action["context"])
+            .create({"start_now": False})
+        )
+        self.assertEqual(wizard.next_stage_id, self.stage_required)
+        self.assertTrue(wizard.survey_locked)
+        self.assertEqual(wizard.survey_id, self.survey_other)
+        wizard.action_confirm()
+        self.assertEqual(self.lead.survey_user_input_ids.survey_id, self.survey_other)
+
+    def test_wizard_rejects_other_survey_when_locked(self):
+        self.stage_required.survey_id = self.survey_other
+        with self.assertRaisesRegex(ValidationError, "Qualification"):
+            self._start_survey(survey=self.survey)
+
+    def test_wizard_free_choice_when_next_stage_accepts_any_survey(self):
+        user_input = self._start_survey(survey=self.survey_other)
+        self.assertEqual(user_input.survey_id, self.survey_other)
+
+    def test_lead_back_url_for_internal_user(self):
+        user_input = self._start_survey()
+        url = user_input.get_lead_back_url()
+        self.assertIn("id=%s&model=crm.lead" % self.lead.id, url)
+
+    def test_lead_back_url_hidden_without_lead_or_for_public(self):
+        user_input = self._start_survey()
+        public_user = self.env.ref("base.public_user")
+        self.assertFalse(user_input.with_user(public_user).sudo().get_lead_back_url())
+        user_input.lead_id = False
+        self.assertFalse(user_input.get_lead_back_url())
+
+    def test_done_page_shows_back_to_lead_button(self):
+        user_input = self._start_survey()
+        html = self.env["ir.qweb"]._render(
+            "survey.survey_fill_form_done",
+            {"survey": user_input.survey_id, "answer": user_input},
+        )
+        self.assertIn(user_input.get_lead_back_url(), str(html).replace("&amp;", "&"))
