@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 - TODAY, Wesley Oliveira <wesley.oliveira@escodoo.com.br>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+
+    <template
+        id="survey_fill_form_done"
+        inherit_id="survey.survey_fill_form_done"
+        name="Survey: finished (back to opportunity)"
+    >
+        <xpath expr="//t[@t-call='survey.survey_button_retake']" position="before">
+            <t t-set="lead_back_url" t-value="answer.get_lead_back_url()" />
+            <div t-if="lead_back_url" class="mt16 mb16">
+                <a
+                    role="button"
+                    class="btn btn-primary btn-lg"
+                    t-att-href="lead_back_url"
+                >
+                    <i class="fa fa-fw fa-arrow-left" role="img" aria-hidden="true" />
+                    Close and return to the opportunity
+                </a>
+            </div>
+        </xpath>
+    </template>
+
+</odoo>

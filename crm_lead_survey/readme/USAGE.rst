@@ -1,9 +1,15 @@
 On an opportunity form:
 
-* **Start Survey** opens a wizard where you pick the survey template and the
-  contact. Confirming it creates the ``survey.user_input`` already linked to the
-  opportunity and (optionally) opens the survey so it can be answered right
-  away.
+* **Start Survey** opens a wizard to start the survey of the opportunity's
+  next stage, i.e. the stage that follows the current one in the stage
+  sequence (only the stages of the opportunity's sales team are considered).
+  When that stage requires a specific survey, it is filled in and cannot be
+  changed; otherwise any survey can be picked. Confirming it creates the
+  ``survey.user_input`` already linked to the opportunity and (optionally)
+  opens the survey so it can be answered right away. Once the survey is
+  submitted, the end page shows a **Close and return to the opportunity**
+  button that brings the user back to the opportunity form (only shown to
+  internal users, not to contacts answering through the survey link).
 * The **Surveys** smart button shows only the participations of that
   opportunity.
 

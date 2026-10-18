@@ -14,3 +14,16 @@ class SurveyUserInput(models.Model):
         index=True,
         help="Opportunity this participation is linked to.",
     )
+
+    def get_lead_back_url(self):
+        """URL of the opportunity form in the backend, offered at the end of
+        the survey to go back to it. Only internal users get it, since the
+        contact answering through the survey link has no access to the CRM."""
+        self.ensure_one()
+        if not self.lead_id or not self.env.user._is_internal():
+            return False
+        action = self.env.ref("crm.crm_lead_action_pipeline")
+        return "/web#id=%s&model=crm.lead&view_type=form&action=%s" % (
+            self.lead_id.id,
+            action.id,
+        )
