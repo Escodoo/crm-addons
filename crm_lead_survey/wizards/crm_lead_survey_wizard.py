@@ -15,15 +15,15 @@ class CrmLeadSurveyWizard(models.TransientModel):
         required=True,
         ondelete="cascade",
     )
-    next_stage_id = fields.Many2one(
+    stage_id = fields.Many2one(
         comodel_name="crm.stage",
-        string="Next Stage",
-        compute="_compute_next_stage_id",
+        string="Current Stage",
+        related="lead_id.stage_id",
     )
     survey_locked = fields.Boolean(
-        compute="_compute_next_stage_id",
-        help="The next stage requires a specific survey, so it is the only one "
-        "that can be started.",
+        compute="_compute_survey_locked",
+        help="The current stage requires a specific survey, so it is the only "
+        "one that can be started.",
     )
     survey_id = fields.Many2one(
         comodel_name="survey.survey",
@@ -53,30 +53,30 @@ class CrmLeadSurveyWizard(models.TransientModel):
         "instance to send them the link later.",
     )
 
-    @api.depends("lead_id")
-    def _compute_next_stage_id(self):
+    @api.depends("lead_id.stage_id")
+    def _compute_survey_locked(self):
         for wizard in self:
-            stage = wizard.lead_id.next_stage_id
-            wizard.next_stage_id = stage
+            stage = wizard.lead_id.stage_id
             wizard.survey_locked = bool(stage.survey_required and stage.survey_id)
 
-    @api.depends("lead_id")
+    @api.depends("lead_id.stage_id")
     def _compute_survey_id(self):
         for wizard in self:
-            stage = wizard.lead_id.next_stage_id
+            stage = wizard.lead_id.stage_id
             if stage.survey_required and stage.survey_id:
                 wizard.survey_id = stage.survey_id
 
     @api.constrains("lead_id", "survey_id")
-    def _check_next_stage_survey(self):
+    def _check_current_stage_survey(self):
         for wizard in self.filtered("survey_locked"):
-            if wizard.survey_id != wizard.next_stage_id.survey_id:
+            stage = wizard.lead_id.stage_id
+            if wizard.survey_id != stage.survey_id:
                 raise ValidationError(
                     _(
-                        'Only the survey "%(survey)s", required by the next '
+                        'Only the survey "%(survey)s", required by the current '
                         'stage "%(stage)s", can be started.',
-                        survey=wizard.next_stage_id.sudo().survey_id.title,
-                        stage=wizard.next_stage_id.name,
+                        survey=stage.sudo().survey_id.title,
+                        stage=stage.name,
                     )
                 )
 

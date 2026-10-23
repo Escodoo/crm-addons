@@ -1,8 +1,7 @@
 On an opportunity form:
 
 * **Start Survey** opens a wizard to start the survey of the opportunity's
-  next stage, i.e. the stage that follows the current one in the stage
-  sequence (only the stages of the opportunity's sales team are considered).
+  current stage, i.e. the stage the opportunity is in right now.
   When that stage requires a specific survey, it is filled in and cannot be
   changed; otherwise any survey can be picked. Confirming it creates the
   ``survey.user_input`` already linked to the opportunity and (optionally)
@@ -14,14 +13,16 @@ On an opportunity form:
   opportunity.
 
 To require a survey on a stage, go to *CRM > Configuration > Stages*, open the
-stage and check **Survey required**. From then on, moving an opportunity to
-that stage - from the form or by dragging it in the kanban - raises an error
-unless at least one linked participation is in the *Completed* state. A survey
-that was only started or is still in progress does not unlock the stage.
+stage and check **Survey required**. From then on, moving an opportunity out of
+that stage to a later one - from the form or by dragging it in the kanban -
+raises an error unless at least one linked participation is in the
+*Completed* state. A survey that was only started or is still in progress
+does not unlock the stage. Entering the stage is always allowed, and so is
+moving the opportunity back to an earlier stage.
 
 To require one survey in particular, also fill **Required survey** on the
-stage. The opportunity then needs a completed participation *of that survey*;
-completed participations of other surveys do not unlock the stage. Leave it
+stage. The opportunity then needs a completed participation *of that survey*
+to move forward; completed participations of other surveys do not unlock it. Leave it
 empty to accept any completed survey.
 
 Participations can also be searched and grouped by opportunity from

@@ -99,8 +99,8 @@ msgstr ""
 #. module: crm_lead_survey
 #: model:ir.model.fields,help:crm_lead_survey.field_crm_stage__survey_required
 msgid ""
-"If checked, an opportunity can only be moved to this stage when it has at "
-"least one completed survey linked to it."
+"If checked, an opportunity can only move forward from this stage when it "
+"has at least one completed survey linked to it."
 msgstr ""
 
 #. module: crm_lead_survey
@@ -124,9 +124,8 @@ msgid "Lead/Opportunity"
 msgstr ""
 
 #. module: crm_lead_survey
-#: model:ir.model.fields,field_description:crm_lead_survey.field_crm_lead__next_stage_id
-#: model:ir.model.fields,field_description:crm_lead_survey.field_crm_lead_survey_wizard__next_stage_id
-msgid "Next Stage"
+#: model:ir.model.fields,field_description:crm_lead_survey.field_crm_lead_survey_wizard__stage_id
+msgid "Current Stage"
 msgstr ""
 
 #. module: crm_lead_survey
@@ -134,8 +133,8 @@ msgstr ""
 #: code:addons/crm_lead_survey/wizards/crm_lead_survey_wizard.py:0
 #, python-format
 msgid ""
-"Only the survey \"%(survey)s\", required by the next stage \"%(stage)s\", "
-"can be started."
+"Only the survey \"%(survey)s\", required by the current stage "
+"\"%(stage)s\", can be started."
 msgstr ""
 
 #. module: crm_lead_survey
@@ -161,11 +160,6 @@ msgstr ""
 #. module: crm_lead_survey
 #: model:ir.model.fields,field_description:crm_lead_survey.field_crm_stage__survey_id
 msgid "Required survey"
-msgstr ""
-
-#. module: crm_lead_survey
-#: model:ir.model.fields,help:crm_lead_survey.field_crm_lead__next_stage_id
-msgid "Stage that follows the current one in the stage sequence."
 msgstr ""
 
 #. module: crm_lead_survey
@@ -203,8 +197,8 @@ msgstr ""
 #. module: crm_lead_survey
 #: model:ir.model.fields,help:crm_lead_survey.field_crm_stage__survey_id
 msgid ""
-"Survey that must be completed for the opportunity before it can be moved to "
-"this stage. If empty, any completed survey is accepted."
+"Survey that must be completed for the opportunity before it can move "
+"forward from this stage. If empty, any completed survey is accepted."
 msgstr ""
 
 #. module: crm_lead_survey
@@ -215,8 +209,8 @@ msgstr ""
 #. module: crm_lead_survey
 #: model:ir.model.fields,help:crm_lead_survey.field_crm_lead_survey_wizard__survey_locked
 msgid ""
-"The next stage requires a specific survey, so it is the only one that can be"
-" started."
+"The current stage requires a specific survey, so it is the only one that "
+"can be started."
 msgstr ""
 
 #. module: crm_lead_survey
@@ -225,12 +219,14 @@ msgstr ""
 #, python-format
 msgid ""
 "The stage \"%(stage)s\" requires the survey \"%(survey)s\" to be completed "
-"for this opportunity."
+"before the opportunity can leave it."
 msgstr ""
 
 #. module: crm_lead_survey
 #. odoo-python
 #: code:addons/crm_lead_survey/models/crm_lead.py:0
 #, python-format
-msgid "This stage requires at least one completed survey."
+msgid ""
+"The stage \"%(stage)s\" requires at least one completed survey before the "
+"opportunity can leave it."
 msgstr ""

@@ -12,9 +12,9 @@
                     <field name="lead_id" readonly="1" options="{'no_open': True}" />
                     <field name="survey_locked" invisible="1" />
                     <field
-                        name="next_stage_id"
+                        name="stage_id"
                         options="{'no_open': True}"
-                        attrs="{'invisible': [('next_stage_id', '=', False)]}"
+                        attrs="{'invisible': [('stage_id', '=', False)]}"
                     />
                     <field
                         name="survey_id"

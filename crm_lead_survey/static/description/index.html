@@ -373,7 +373,7 @@ ul.auto-toc {
 <p>This module links Survey participations to CRM opportunities.</p>
 <p>It adds a <tt class="docutils literal">lead_id</tt> field on <tt class="docutils literal">survey.user_input</tt>, so every participation can
 point to the opportunity it was collected for, and it lets you mark CRM stages
-that can only be reached once the opportunity has a <strong>completed</strong> survey -
+that the opportunity can only leave (moving forward) once it has a <strong>completed</strong> survey -
 either any survey, or a specific survey chosen on the stage.</p>
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
@@ -393,8 +393,7 @@ either any survey, or a specific survey chosen on the stage.</p>
 <p>On an opportunity form:</p>
 <ul class="simple">
 <li><strong>Start Survey</strong> opens a wizard to start the survey of the opportunity’s
-next stage, i.e. the stage that follows the current one in the stage
-sequence (only the stages of the opportunity’s sales team are considered).
+current stage, i.e. the stage the opportunity is in right now.
 When that stage requires a specific survey, it is filled in and cannot be
 changed; otherwise any survey can be picked. Confirming it creates the
 <tt class="docutils literal">survey.user_input</tt> already linked to the opportunity and (optionally)
@@ -406,13 +405,15 @@ internal users, not to contacts answering through the survey link).</li>
 opportunity.</li>
 </ul>
 <p>To require a survey on a stage, go to <em>CRM &gt; Configuration &gt; Stages</em>, open the
-stage and check <strong>Survey required</strong>. From then on, moving an opportunity to
-that stage - from the form or by dragging it in the kanban - raises an error
-unless at least one linked participation is in the <em>Completed</em> state. A survey
-that was only started or is still in progress does not unlock the stage.</p>
+stage and check <strong>Survey required</strong>. From then on, moving an opportunity out of
+that stage to a later one - from the form or by dragging it in the kanban -
+raises an error unless at least one linked participation is in the
+<em>Completed</em> state. A survey that was only started or is still in progress
+does not unlock the stage. Entering the stage is always allowed, and so is
+moving the opportunity back to an earlier stage.</p>
 <p>To require one survey in particular, also fill <strong>Required survey</strong> on the
-stage. The opportunity then needs a completed participation <em>of that survey</em>;
-completed participations of other surveys do not unlock the stage. Leave it
+stage. The opportunity then needs a completed participation <em>of that survey</em>
+to move forward; completed participations of other surveys do not unlock it. Leave it
 empty to accept any completed survey.</p>
 <p>Participations can also be searched and grouped by opportunity from
 <em>Surveys &gt; Participations</em>.</p>
