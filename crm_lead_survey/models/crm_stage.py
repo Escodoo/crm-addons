@@ -9,15 +9,16 @@ class CrmStage(models.Model):
 
     survey_required = fields.Boolean(
         string="Survey required",
-        help="If checked, an opportunity can only be moved to this stage when "
-        "it has at least one completed survey linked to it.",
+        help="If checked, an opportunity can only move forward from this stage "
+        "when it has at least one completed survey linked to it.",
     )
     survey_id = fields.Many2one(
         comodel_name="survey.survey",
         string="Required survey",
         ondelete="restrict",
         help="Survey that must be completed for the opportunity before it can "
-        "be moved to this stage. If empty, any completed survey is accepted.",
+        "move forward from this stage. If empty, any completed survey is "
+        "accepted.",
     )
 
     @api.onchange("survey_required")

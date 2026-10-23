@@ -21,34 +21,6 @@ class CrmLead(models.Model):
         string="# Completed Surveys",
         compute="_compute_survey_count",
     )
-    next_stage_id = fields.Many2one(
-        comodel_name="crm.stage",
-        string="Next Stage",
-        compute="_compute_next_stage_id",
-        help="Stage that follows the current one in the stage sequence.",
-    )
-
-    @api.depends("stage_id", "team_id")
-    def _compute_next_stage_id(self):
-        for lead in self:
-            lead.next_stage_id = lead._get_next_stage()
-
-    def _get_next_stage(self):
-        """Return the stage following the current one, among the stages
-        available for the lead's sales team, ordered by sequence."""
-        self.ensure_one()
-        stages = self.env["crm.stage"].search(
-            ["|", ("team_id", "=", False), ("team_id", "=", self.team_id.id)]
-        )
-        if not self.stage_id:
-            return stages[:1]
-        if self.stage_id in stages:
-            following = stages[stages.ids.index(self.stage_id.id) + 1 :]
-        else:
-            following = stages.filtered(
-                lambda stage: stage.sequence > self.stage_id.sequence
-            )
-        return following[:1]
 
     @api.depends("survey_user_input_ids", "survey_user_input_ids.state")
     def _compute_survey_count(self):
@@ -75,29 +47,53 @@ class CrmLead(models.Model):
             lead.survey_count = totals.get(lead_id, 0)
             lead.survey_done_count = done_totals.get(lead_id, 0)
 
-    @api.constrains("stage_id", "survey_user_input_ids")
-    def _check_stage_survey_required(self):
-        for lead in self:
-            stage = lead.stage_id
-            if not stage.survey_required:
-                continue
-            done_inputs = lead.sudo().survey_user_input_ids.filtered(
-                lambda user_input: user_input.state == "done"
-            )
-            if not stage.survey_id:
-                if not done_inputs:
-                    raise ValidationError(
-                        _("This stage requires at least one completed survey.")
-                    )
-            elif stage.survey_id not in done_inputs.survey_id:
+    def _is_forward_move(self, new_stage):
+        """Whether going from the current stage to ``new_stage`` moves the
+        opportunity forward in the pipeline, following the stage order."""
+        self.ensure_one()
+        old_stage = self.stage_id
+        if not old_stage or not new_stage or old_stage == new_stage:
+            return False
+        ordered = self.env["crm.stage"].search(
+            [("id", "in", (old_stage | new_stage).ids)]
+        )
+        return ordered[:1] == old_stage
+
+    def _check_stage_survey_done(self, stage):
+        """Raise if ``stage`` requires a survey that this opportunity has not
+        completed yet."""
+        self.ensure_one()
+        if not stage.survey_required:
+            return
+        done_inputs = self.sudo().survey_user_input_ids.filtered(
+            lambda user_input: user_input.state == "done"
+        )
+        if not stage.survey_id:
+            if not done_inputs:
                 raise ValidationError(
                     _(
-                        'The stage "%(stage)s" requires the survey "%(survey)s" '
-                        "to be completed for this opportunity.",
+                        'The stage "%(stage)s" requires at least one completed '
+                        "survey before the opportunity can leave it.",
                         stage=stage.name,
-                        survey=stage.sudo().survey_id.title,
                     )
                 )
+        elif stage.survey_id not in done_inputs.survey_id:
+            raise ValidationError(
+                _(
+                    'The stage "%(stage)s" requires the survey "%(survey)s" '
+                    "to be completed before the opportunity can leave it.",
+                    stage=stage.name,
+                    survey=stage.sudo().survey_id.title,
+                )
+            )
+
+    def write(self, vals):
+        if vals.get("stage_id"):
+            new_stage = self.env["crm.stage"].browse(vals["stage_id"])
+            for lead in self:
+                if lead._is_forward_move(new_stage):
+                    lead._check_stage_survey_done(lead.stage_id)
+        return super().write(vals)
 
     def action_view_surveys(self):
         self.ensure_one()
