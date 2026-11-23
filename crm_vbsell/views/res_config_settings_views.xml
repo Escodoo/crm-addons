@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 - TODAY, Marcel Savegnago <marcel.savegnago@escodoo.com.br>
+     License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.crm.vbsell</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="crm.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[@data-key='crm']" position="inside">
+                <h2>VBSell</h2>
+                <div class="row mt16 o_settings_container" id="crm_vbsell_settings">
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_left_pane">
+                            <field name="vbsell_enabled" />
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="vbsell_enabled" />
+                            <div class="text-muted">
+                                Push stage changes to VBSell and accept its webhook
+                            </div>
+                            <div
+                                class="content-group"
+                                attrs="{'invisible': [('vbsell_enabled', '=', False)]}"
+                            >
+                                <div class="row mt16">
+                                    <label
+                                        for="vbsell_api_base_url"
+                                        class="col-lg-4 o_light_label"
+                                    />
+                                    <field name="vbsell_api_base_url" />
+                                </div>
+                                <div class="row" groups="base.group_system">
+                                    <label
+                                        for="vbsell_api_key"
+                                        class="col-lg-4 o_light_label"
+                                    />
+                                    <field name="vbsell_api_key" password="True" />
+                                </div>
+                                <div class="row" groups="base.group_system">
+                                    <label
+                                        for="vbsell_webhook_secret"
+                                        class="col-lg-4 o_light_label"
+                                    />
+                                    <field
+                                        name="vbsell_webhook_secret"
+                                        password="True"
+                                    />
+                                </div>
+                                <div class="row">
+                                    <label
+                                        for="vbsell_company_uuid"
+                                        class="col-lg-4 o_light_label"
+                                    />
+                                    <field name="vbsell_company_uuid" />
+                                </div>
+                                <div class="row">
+                                    <label
+                                        for="vbsell_user_id"
+                                        class="col-lg-4 o_light_label"
+                                    />
+                                    <field name="vbsell_user_id" />
+                                </div>
+                                <div class="row">
+                                    <label
+                                        for="vbsell_source_id"
+                                        class="col-lg-4 o_light_label"
+                                    />
+                                    <field name="vbsell_source_id" />
+                                </div>
+                                <div class="row">
+                                    <label
+                                        for="vbsell_lost_reason_id"
+                                        class="col-lg-4 o_light_label"
+                                    />
+                                    <field name="vbsell_lost_reason_id" />
+                                </div>
+                                <div class="row">
+                                    <label
+                                        for="vbsell_min_create_stage"
+                                        class="col-lg-4 o_light_label"
+                                    />
+                                    <field name="vbsell_min_create_stage" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
