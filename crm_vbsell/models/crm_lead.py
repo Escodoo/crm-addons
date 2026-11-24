@@ -239,10 +239,24 @@ class CrmLead(models.Model):
                 variants.append(formatted)
         return variants
 
+    def _vbsell_partner_model(self):
+        """Partner environment that stores the tax id sent by VBSell.
+
+        ``no_vat_validation`` skips the European VAT check. A Brazilian
+        company also checks CPF and CNPJ when that localization is installed.
+        VBSell is not a fiscal source, so a tax id that fails the check must
+        not reject the opportunity.
+        """
+        return self.env["res.partner"].with_context(
+            no_vat_validation=True,
+            disable_cpf_cnpj_validation=True,
+            allow_vat_duplicate=True,
+        )
+
     def _vbsell_partner(self, company, contact):
         if self._vbsell_is_cnpj(contact.get("vat")):
             return self._vbsell_company_and_contact(company, contact)
-        partner_model = self.env["res.partner"].with_context(no_vat_validation=True)
+        partner_model = self._vbsell_partner_model()
         vat = contact.get("vat") or False
         email = contact.get("email") or False
         company_domain = [("company_id", "in", [False, company.id])]
@@ -279,7 +293,7 @@ class CrmLead(models.Model):
         The lead customer is the person. The company name on the opportunity
         comes from that person's parent.
         """
-        partner_model = self.env["res.partner"].with_context(no_vat_validation=True)
+        partner_model = self._vbsell_partner_model()
         vat = contact.get("vat")
         person_name = contact.get("name") or _("VBSell contact")
         scope = [("company_id", "in", [False, company.id])]
