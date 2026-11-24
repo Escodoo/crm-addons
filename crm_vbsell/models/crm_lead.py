@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 import logging
+import re
 
 from markupsafe import Markup, escape
 
@@ -213,7 +214,34 @@ class CrmLead(models.Model):
                 _("The CRM stage mapped to VBSell Won must be marked as won.")
             )
 
+    def _vbsell_vat_digits(self, vat):
+        return re.sub(r"\D", "", vat or "")
+
+    def _vbsell_is_cnpj(self, vat):
+        """A CNPJ has 14 digits. A CPF and other tax ids stay a single partner."""
+        return len(self._vbsell_vat_digits(vat)) == 14
+
+    def _vbsell_cnpj_variants(self, vat):
+        digits = self._vbsell_vat_digits(vat)
+        variants = []
+        for value in (vat, digits):
+            if value and value not in variants:
+                variants.append(value)
+        if len(digits) == 14:
+            formatted = "{}.{}.{}/{}-{}".format(
+                digits[:2],
+                digits[2:5],
+                digits[5:8],
+                digits[8:12],
+                digits[12:],
+            )
+            if formatted not in variants:
+                variants.append(formatted)
+        return variants
+
     def _vbsell_partner(self, company, contact):
+        if self._vbsell_is_cnpj(contact.get("vat")):
+            return self._vbsell_company_and_contact(company, contact)
         partner_model = self.env["res.partner"].with_context(no_vat_validation=True)
         vat = contact.get("vat") or False
         email = contact.get("email") or False
@@ -244,6 +272,68 @@ class CrmLead(models.Model):
                 "company_id": company.id,
             }
         )
+
+    def _vbsell_company_and_contact(self, company, contact):
+        """Create the company that owns the CNPJ and the person linked to it.
+
+        The lead customer is the person. The company name on the opportunity
+        comes from that person's parent.
+        """
+        partner_model = self.env["res.partner"].with_context(no_vat_validation=True)
+        vat = contact.get("vat")
+        person_name = contact.get("name") or _("VBSell contact")
+        scope = [("company_id", "in", [False, company.id])]
+        matches = partner_model.search(
+            scope + [("vat", "in", self._vbsell_cnpj_variants(vat))]
+        )
+        company_partner = matches.filtered("is_company")[:1]
+        organization = contact.get("organizationName") or (
+            company_partner.name if company_partner else person_name
+        )
+        if not company_partner:
+            # A previous sync stored the CNPJ on one partner. That partner
+            # becomes the company, and the person is created under it.
+            flat = matches.filtered(lambda partner: not partner.parent_id)[:1]
+            if flat:
+                flat.write({"is_company": True, "name": organization, "vat": vat})
+                company_partner = flat
+        if not company_partner:
+            company_partner = partner_model.create(
+                {
+                    "name": organization or _("VBSell company"),
+                    "is_company": True,
+                    "vat": vat,
+                    "company_id": company.id,
+                }
+            )
+        return self._vbsell_child_contact(
+            partner_model, company, company_partner, contact, person_name
+        )
+
+    def _vbsell_child_contact(
+        self, partner_model, company, company_partner, contact, person_name
+    ):
+        email = contact.get("email") or False
+        phone = contact.get("phone") or False
+        domain = [("parent_id", "=", company_partner.id)]
+        child = partner_model.browse()
+        if email:
+            child = partner_model.search(domain + [("email", "=ilike", email)], limit=1)
+        if not child:
+            child = partner_model.search(domain + [("name", "=", person_name)], limit=1)
+        values = {
+            "name": person_name,
+            "email": email,
+            "phone": phone,
+            "function": contact.get("jobTitle") or False,
+            "parent_id": company_partner.id,
+            "company_id": company.id,
+            "is_company": False,
+        }
+        if child:
+            child.write({key: value for key, value in values.items() if value})
+            return child
+        return partner_model.create(values)
 
     def _vbsell_create_lead(self, company, opportunity, new_stage, opportunity_id):
         contact_id = opportunity.get("contactId")
