@@ -471,12 +471,19 @@ class TestCrmVbsell(TransactionCase):
         self.assertEqual(lead.probability, 100)
 
     def test_existing_partner_is_reused_by_vat_then_email(self):
-        vat_partner = self.env["res.partner"].create(
-            {
-                "name": "Existing VAT",
-                "vat": "BE0477472701",
-                "company_id": self.company.id,
-            }
+        vat_partner = (
+            self.env["res.partner"]
+            .with_context(
+                no_vat_validation=True,
+                disable_cpf_cnpj_validation=True,
+            )
+            .create(
+                {
+                    "name": "Existing VAT",
+                    "vat": "BE0477472701",
+                    "company_id": self.company.id,
+                }
+            )
         )
         with patch(
             "odoo.addons.crm_vbsell.models.vbsell_api.requests.get",
@@ -849,7 +856,12 @@ class TestCrmVbsell(TransactionCase):
         self.assertFalse(contact.is_company)
         # VAT is a commercial field, so Odoo copies the company CNPJ onto the contact.
         self.assertEqual(contact.commercial_partner_id, company_partner)
-        self.assertEqual(contact.vat, cnpj)
+        # A Brazilian partner keeps the CNPJ on the company. Without that
+        # localization, Odoo copies commercial fields, including VAT.
+        if contact.country_id == self.env.ref("base.br"):
+            self.assertFalse(contact.vat)
+        else:
+            self.assertEqual(contact.vat, cnpj)
         self.assertEqual(contact.name, "Ada Lovelace")
         self.assertEqual(contact.email, "ada@example.com")
         self.assertEqual(contact.function, "Analyst")
