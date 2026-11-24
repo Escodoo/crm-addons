@@ -829,3 +829,113 @@ class TestCrmVbsell(TransactionCase):
         )
         self.assertEqual(self.company.vbsell_api_key, "rotated-key")
         self.assertEqual(self.company.vbsell_webhook_secret, "rotated-secret")
+
+    def test_cnpj_creates_company_and_linked_contact(self):
+        cnpj = "11222333000181"
+        with patch(
+            "odoo.addons.crm_vbsell.models.vbsell_api.requests.get",
+            return_value=self._contact_response(
+                vat=cnpj,
+                organizationName="Analytical Engines",
+                jobTitle="Analyst",
+            ),
+        ):
+            result = self.env["crm.lead"]._vbsell_apply_webhook(
+                self.company, self._payload("qualified", opportunity_id="opp-cnpj")
+            )
+        lead = self.env["crm.lead"].browse(result["lead_id"])
+        contact = lead.partner_id
+        company_partner = contact.parent_id
+        self.assertFalse(contact.is_company)
+        # VAT is a commercial field, so Odoo copies the company CNPJ onto the contact.
+        self.assertEqual(contact.commercial_partner_id, company_partner)
+        self.assertEqual(contact.vat, cnpj)
+        self.assertEqual(contact.name, "Ada Lovelace")
+        self.assertEqual(contact.email, "ada@example.com")
+        self.assertEqual(contact.function, "Analyst")
+        self.assertTrue(company_partner.is_company)
+        self.assertEqual(company_partner.name, "Analytical Engines")
+        self.assertEqual(company_partner.vat, cnpj)
+        self.assertEqual(lead.contact_name, "Ada Lovelace")
+        self.assertEqual(lead.partner_name, "Analytical Engines")
+
+        with patch(
+            "odoo.addons.crm_vbsell.models.vbsell_api.requests.get",
+            return_value=self._contact_response(
+                vat="11.222.333/0001-81",
+                name="Grace Hopper",
+                email="grace@example.com",
+                organizationName="Analytical Engines",
+            ),
+        ):
+            second = self.env["crm.lead"]._vbsell_apply_webhook(
+                self.company, self._payload("qualified", opportunity_id="opp-cnpj-2")
+            )
+        other = self.env["crm.lead"].browse(second["lead_id"])
+        self.assertEqual(other.partner_id.parent_id, company_partner)
+        self.assertNotEqual(other.partner_id, contact)
+        self.assertEqual(
+            self.env["res.partner"].search_count(
+                [("vat", "in", [cnpj, "11.222.333/0001-81"]), ("is_company", "=", True)]
+            ),
+            1,
+        )
+
+    def test_same_cnpj_and_email_reuses_the_contact(self):
+        payload = self._contact_response(
+            vat="11222333000181", organizationName="Analytical Engines"
+        )
+        with patch(
+            "odoo.addons.crm_vbsell.models.vbsell_api.requests.get",
+            return_value=payload,
+        ):
+            first = self.env["crm.lead"]._vbsell_apply_webhook(
+                self.company, self._payload("qualified", opportunity_id="opp-cnpj-a")
+            )
+            second = self.env["crm.lead"]._vbsell_apply_webhook(
+                self.company, self._payload("qualified", opportunity_id="opp-cnpj-b")
+            )
+        first_lead = self.env["crm.lead"].browse(first["lead_id"])
+        second_lead = self.env["crm.lead"].browse(second["lead_id"])
+        self.assertEqual(first_lead.partner_id, second_lead.partner_id)
+        self.assertEqual(
+            first_lead.partner_id.parent_id, second_lead.partner_id.parent_id
+        )
+
+    def test_existing_cnpj_partner_becomes_the_company(self):
+        flat = self.env["res.partner"].create(
+            {
+                "name": "Old flat partner",
+                "vat": "11.222.333/0001-81",
+                "company_id": self.company.id,
+            }
+        )
+        with patch(
+            "odoo.addons.crm_vbsell.models.vbsell_api.requests.get",
+            return_value=self._contact_response(
+                vat="11222333000181",
+                organizationName="Analytical Engines",
+            ),
+        ):
+            result = self.env["crm.lead"]._vbsell_apply_webhook(
+                self.company, self._payload("qualified", opportunity_id="opp-cnpj-flat")
+            )
+        lead = self.env["crm.lead"].browse(result["lead_id"])
+        self.assertEqual(lead.partner_id.parent_id, flat)
+        self.assertTrue(flat.is_company)
+        self.assertEqual(flat.name, "Analytical Engines")
+        self.assertFalse(lead.partner_id.is_company)
+
+    def test_cpf_stays_a_single_partner(self):
+        cpf = "11111111111"
+        with patch(
+            "odoo.addons.crm_vbsell.models.vbsell_api.requests.get",
+            return_value=self._contact_response(vat=cpf, organizationName="Ignored"),
+        ):
+            result = self.env["crm.lead"]._vbsell_apply_webhook(
+                self.company, self._payload("qualified", opportunity_id="opp-cpf")
+            )
+        lead = self.env["crm.lead"].browse(result["lead_id"])
+        self.assertFalse(lead.partner_id.parent_id)
+        self.assertFalse(lead.partner_id.is_company)
+        self.assertEqual(lead.partner_id.vat, cpf)
