@@ -13,11 +13,14 @@
             >
                 <div class="row">
                     <label for="vbsell_cnpj_search" class="col-lg-4 o_light_label" />
-                    <field name="vbsell_cnpj_search" />
-                </div>
-                <div class="text-muted">
-                    Fill the company from the Brazilian CNPJ service. A company
-                    that already has a legal name is not queried again.
+                    <div class="col-lg-8">
+                        <field name="vbsell_cnpj_search" class="oe_inline" />
+                        <div class="text-muted">
+                            Fill the company from the Brazilian CNPJ service.
+                            A company that already has a legal name is not
+                            queried again.
+                        </div>
+                    </div>
                 </div>
             </xpath>
         </field>

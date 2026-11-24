@@ -8,7 +8,7 @@ class ResCompany(models.Model):
     _inherit = "res.company"
 
     vbsell_cnpj_search = fields.Boolean(
-        string="Look Up VBSell CNPJ",
+        string="Look Up CNPJ",
         help=(
             "When a VBSell contact has a CNPJ, fill the company from the "
             "Brazilian CNPJ service configured in the localization settings. "
