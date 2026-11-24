@@ -847,7 +847,9 @@ class TestCrmVbsell(TransactionCase):
         contact = lead.partner_id
         company_partner = contact.parent_id
         self.assertFalse(contact.is_company)
-        self.assertFalse(contact.vat)
+        # VAT is a commercial field, so Odoo copies the company CNPJ onto the contact.
+        self.assertEqual(contact.commercial_partner_id, company_partner)
+        self.assertEqual(contact.vat, cnpj)
         self.assertEqual(contact.name, "Ada Lovelace")
         self.assertEqual(contact.email, "ada@example.com")
         self.assertEqual(contact.function, "Analyst")
