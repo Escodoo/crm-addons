@@ -746,3 +746,86 @@ class TestCrmVbsell(TransactionCase):
             side_effect=requests.RequestException("down"),
         ), self.assertRaises(UserError):
             api.patch_opportunity(self.company, "opp-1", "qualified")
+
+    def _settings_vals(self, **overrides):
+        vals = {
+            "company_id": self.company.id,
+            "vbsell_enabled": True,
+            "vbsell_api_base_url": "https://vbsell.test",
+            "vbsell_api_key": "test-key",
+            "vbsell_webhook_secret": "test-secret",
+            "vbsell_company_uuid": "company-uuid",
+            "vbsell_user_id": self.env.user.id,
+            "vbsell_source_id": self.source.id,
+            "vbsell_lost_reason_id": self.reason.id,
+            "vbsell_min_create_stage": "qualified",
+        }
+        vals.update(overrides)
+        return vals
+
+    def test_settings_form_loads_the_company_configuration(self):
+        values = self.env["res.config.settings"].default_get(
+            [
+                "vbsell_enabled",
+                "vbsell_company_uuid",
+                "vbsell_api_key",
+                "vbsell_webhook_secret",
+                "vbsell_user_id",
+            ]
+        )
+        self.assertTrue(values["vbsell_enabled"])
+        self.assertEqual(values["vbsell_company_uuid"], "company-uuid")
+        self.assertEqual(values["vbsell_api_key"], "test-key")
+        self.assertEqual(values["vbsell_webhook_secret"], "test-secret")
+        self.assertEqual(values["vbsell_user_id"], self.env.user.id)
+
+    def test_blank_settings_save_keeps_the_company_configuration(self):
+        self.env["res.config.settings"].create(
+            self._settings_vals(
+                vbsell_enabled=False,
+                vbsell_api_base_url=False,
+                vbsell_api_key=False,
+                vbsell_webhook_secret=False,
+                vbsell_company_uuid=False,
+                vbsell_user_id=False,
+                vbsell_source_id=False,
+                vbsell_lost_reason_id=False,
+                vbsell_min_create_stage=False,
+            )
+        )
+        self.assertTrue(self.company.vbsell_enabled)
+        self.assertEqual(self.company.vbsell_api_key, "test-key")
+        self.assertEqual(self.company.vbsell_webhook_secret, "test-secret")
+        self.assertEqual(self.company.vbsell_company_uuid, "company-uuid")
+        self.assertEqual(self.company.vbsell_user_id, self.env.user)
+        self.assertEqual(self.company.vbsell_min_create_stage, "qualified")
+
+    def test_disabling_settings_keeps_the_other_company_values(self):
+        self.env["res.config.settings"].create(
+            self._settings_vals(vbsell_enabled=False)
+        )
+        self.assertFalse(self.company.vbsell_enabled)
+        self.assertEqual(self.company.vbsell_company_uuid, "company-uuid")
+        self.assertEqual(self.company.vbsell_api_key, "test-key")
+
+    def test_blank_secret_keeps_the_stored_key(self):
+        self.env["res.config.settings"].create(
+            self._settings_vals(
+                vbsell_api_key=False,
+                vbsell_webhook_secret="",
+                vbsell_api_base_url="https://vbsell.example",
+            )
+        )
+        self.assertEqual(self.company.vbsell_api_key, "test-key")
+        self.assertEqual(self.company.vbsell_webhook_secret, "test-secret")
+        self.assertEqual(self.company.vbsell_api_base_url, "https://vbsell.example")
+
+    def test_settings_save_replaces_the_api_key(self):
+        self.env["res.config.settings"].create(
+            self._settings_vals(
+                vbsell_api_key="rotated-key",
+                vbsell_webhook_secret="rotated-secret",
+            )
+        )
+        self.assertEqual(self.company.vbsell_api_key, "rotated-key")
+        self.assertEqual(self.company.vbsell_webhook_secret, "rotated-secret")
